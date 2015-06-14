@@ -96,7 +96,14 @@ public function __construct(TurfWarsPlugIn $plugin) {
 					}
 				}
 				// $playerParticles
-				
+				if (strtolower ( $args [0] ) == "shop") {
+					$output = ".\n";
+						$sender->sendMessage ( $output );
+					
+					if (count ( $args ) != 2) {
+						$output = "[SkyWars] Usage: /sw shop .\n";
+						$sender->sendMessage ( $output );
+						return;
 				
 		}
 	}
