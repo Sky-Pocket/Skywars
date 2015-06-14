@@ -7,6 +7,9 @@ use pocketmine\utils\TextFormat;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\command\CommandExecutor;
+use pocketmine\scheduler\Task;
+
+
 use SkyWars\MiniGameBase;
 use SkyWars\SkyWarsCommand;
 @author robozeriandsvile
@@ -44,6 +47,15 @@ class Main extends PluginBase implements CommandExecutor
   	$this->initScheduler();
 		
 		$this->log ( TextFormat::GREEN . "- SKyWars Enable -" );
+		
+       
+        $this->pmsg = " Click a sign to start playing! For use / sw info or / sw help. ";
+       
+        $this->pmc = 0;
+
+        $this->getServer()->getScheduler()->scheduleRepeatingTask(new CallbackTask(array($this, "popup")),3); 
+
+
   	
   }
   private function initConfigFile() {
@@ -75,6 +87,24 @@ class Main extends PluginBase implements CommandExecutor
                 $this->log ( TextFormat::RED . "- SKyWars Disable -" ); 
   }
 }
+  public function popup {
+  	$tn = substr($this->pmsg,1);
+        $tc = substr($this->pmsg,1,1);
+       
+        $this->pmsg = $tn.$tc;
+       
+        foreach(Server::getInstance()->getOnlinePlayers() as $ppp){
+           
+            if($ppp->getLevel() == $this->lobby){
+           
+                $ppp->sendPopup(str_repeat("§4#",25) . "\n§e   " . substr($this->pmsg,0,25));
+           
+            }
+        }
+       
+        $this->pmc++;
+  }
 private function log($msg) {
 		$this->getLogger ()->info ( $msg );
 	}
+
