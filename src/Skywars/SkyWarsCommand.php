@@ -41,5 +41,64 @@ use pocketmine\item\ItemBlock;
 use pocketmine\item\Item;
 class SkyWarsCommand extends MiniGamesBase 
 {
-
+public function __construct(TurfWarsPlugIn $plugin) {
+		parent::__construct ( $plugin );
+	}
+	
+	/**
+	 * onCommand
+	 *
+	 * @param CommandSender $sender        	
+	 * @param Command $command        	
+	 * @param unknown $label        	
+	 * @param array $args        	
+	 * @return boolean
+	 */
+	public function onCommand(CommandSender $sender, Command $command, $label, array $args) {
+		// check command names
+		if (((strtolower ( $command->getName () ) == "skywars" || strtolower ( $command->getName () ) == "sw")) && isset ( $args [0] )) {
+			try {
+				$output = "";
+				if (! $sender instanceof Player) {
+					$output .= "Commands only available in-game play.\n";
+					$sender->sendMessage ( $output );
+					return;
+				}
+				//particle 
+				if (strtolower ( $args [0] ) == "particle") {
+					if (count ( $args ) != 2) {
+						$output = "[SkyWars] Usage: /sw particle [particle name].\n";
+						$sender->sendMessage ( $output );
+						return;
+					}
+					if ($sender instanceof Player) {
+						if ($args [1] == "clear") {
+							unset ( $this->plugin->playerParticles [$sender->getName ()] );
+							$output = "[SkyWars] Cleared been particle]\n";
+						} else {
+							$particle = MagicUtil::getParticle ( $args [1], $sender->getPosition (), 1, 1, 1, null );
+							if ($particle == null) {
+								$output = "[SkyWars]particle name [" . $args [1] . "] not found! \n";
+								$sender->sendMessage ( $output );
+								return;
+							}
+							$this->plugin->playerParticles [$sender->getName ()] = $args [1];
+							$output = "[SkyWars] Player set to [" . $args [1] . "]\n";
+							$sender->sendMessage ( $output );
+						}
+						return;
+					}
+				}
+				
+				if (strtolower ( $args [0] ) == "list") {
+					foreach ( $this->getPlugin ()->playArenas as $arena ) {
+						$sender->sendMessage ( $arena->name );
+					}
+				}
+				// $playerParticles
+				
+				
+		}
+	}
+}
 }
