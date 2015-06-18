@@ -40,7 +40,7 @@ abstract class MiniGameBase {
 	protected function getLog() {
 		return $this->plugin->getLogger();
 	}
-	
+	//
 	protected function log($msg) {
 		return $this->plugin->getLogger()->info($msg);
 	}
